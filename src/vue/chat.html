@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHAT - APP</title>
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"
+    integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI"
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,200;0,400;0,600;0,700;0,800;1,300;1,900&display=swap"
+    rel="stylesheet">
+  <link rel="shortcut icon" href="./assets/favicon.png" type="image/x-icon">
+  <style>
+    /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
+
+    /* Document
+   ========================================================================== */
+
+    /**
+ * 1. Correct the line height in all browsers.
+ * 2. Prevent adjustments of font size after orientation changes in iOS.
+ */
+
+    html {
+      line-height: 1.15;
+      /* 1 */
+      -webkit-text-size-adjust: 100%;
+      /* 2 */
+    }
+
+    /* Sections
+     ========================================================================== */
+
+    /**
+   * Remove the margin in all browsers.
+   */
+
+    body {
+      margin: 0;
+    }
+
+    /**
+   * Render the `main` element consistently in IE.
+   */
+
+    main {
+      display: block;
+    }
+
+    /**
+   * Correct the font size and margin on `h1` elements within `section` and
+   * `article` contexts in Chrome, Firefox, and Safari.
+   */
+
+    h1 {
+      font-size: 2em;
+      margin: 0.67em 0;
+    }
+
+    /* Grouping content
+     ========================================================================== */
+
+    /**
+   * 1. Add the correct box sizing in Firefox.
+   * 2. Show the overflow in Edge and IE.
+   */
+
+    hr {
+      box-sizing: content-box;
+      /* 1 */
+      height: 0;
+      /* 1 */
+      overflow: visible;
+      /* 2 */
+    }
+
+    /**
+   * 1. Correct the inheritance and scaling of font size in all browsers.
+   * 2. Correct the odd `em` font sizing in all browsers.
+   */
+
+    pre {
+      font-family: monospace, monospace;
+      /* 1 */
+      font-size: 1em;
+      /* 2 */
+    }
+
+    /* Text-level semantics
+     ========================================================================== */
+
+    /**
+   * Remove the gray background on active links in IE 10.
+   */
+
+    a {
+      background-color: transparent;
+    }
+
+    /**
+   * 1. Remove the bottom border in Chrome 57-
+   * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+   */
+
+    abbr[title] {
+      border-bottom: none;
+      /* 1 */
+      text-decoration: underline;
+      /* 2 */
+      text-decoration: underline dotted;
+      /* 2 */
+    }
+
+    /**
+   * Add the correct font weight in Chrome, Edge, and Safari.
+   */
+
+    b,
+    strong {
+      font-weight: bolder;
+    }
+
+    /**
+   * 1. Correct the inheritance and scaling of font size in all browsers.
+   * 2. Correct the odd `em` font sizing in all browsers.
+   */
+
+    code,
+    kbd,
+    samp {
+      font-family: monospace, monospace;
+      /* 1 */
+      font-size: 1em;
+      /* 2 */
+    }
+
+    /**
+   * Add the correct font size in all browsers.
+   */
+
+    small {
+      font-size: 80%;
+    }
+
+    /**
+   * Prevent `sub` and `sup` elements from affecting the line height in
+   * all browsers.
+   */
+
+    sub,
+    sup {
+      font-size: 75%;
+      line-height: 0;
+      position: relative;
+      vertical-align: baseline;
+    }
+
+    sub {
+      bottom: -0.25em;
+    }
+
+    sup {
+      top: -0.5em;
+    }
+
+    /* Embedded content
+     ========================================================================== */
+
+    /**
+   * Remove the border on images inside links in IE 10.
+   */
+
+    img {
+      border-style: none;
+    }
+
+    /* Forms
+     ========================================================================== */
+
+    /**
+   * 1. Change the font styles in all browsers.
+   * 2. Remove the margin in Firefox and Safari.
+   */
+
+    button,
+    input,
+    optgroup,
+    select,
+    textarea {
+      font-family: inherit;
+      /* 1 */
+      font-size: 100%;
+      /* 1 */
+      line-height: 1.15;
+      /* 1 */
+      margin: 0;
+      /* 2 */
+    }
+
+    /**
+   * Show the overflow in IE.
+   * 1. Show the overflow in Edge.
+   */
+
+    button,
+    input {
+      /* 1 */
+      overflow: visible;
+    }
+
+    /**
+   * Remove the inheritance of text transform in Edge, Firefox, and IE.
+   * 1. Remove the inheritance of text transform in Firefox.
+   */
+
+    button,
+    select {
+      /* 1 */
+      text-transform: none;
+    }
+
+    /**
+   * Correct the inability to style clickable types in iOS and Safari.
+   */
+
+    button,
+    [type="button"],
+    [type="reset"],
+    [type="submit"] {
+      -webkit-appearance: button;
+    }
+
+    /**
+   * Remove the inner border and padding in Firefox.
+   */
+
+    button::-moz-focus-inner,
+    [type="button"]::-moz-focus-inner,
+    [type="reset"]::-moz-focus-inner,
+    [type="submit"]::-moz-focus-inner {
+      border-style: none;
+      padding: 0;
+    }
+
+    /**
+   * Restore the focus styles unset by the previous rule.
+   */
+
+    button:-moz-focusring,
+    [type="button"]:-moz-focusring,
+    [type="reset"]:-moz-focusring,
+    [type="submit"]:-moz-focusring {
+      outline: 1px dotted ButtonText;
+    }
+
+    /**
+   * Correct the padding in Firefox.
+   */
+
+    fieldset {
+      padding: 0.35em 0.75em 0.625em;
+    }
+
+    /**
+   * 1. Correct the text wrapping in Edge and IE.
+   * 2. Correct the color inheritance from `fieldset` elements in IE.
+   * 3. Remove the padding so developers are not caught out when they zero out
+   *    `fieldset` elements in all browsers.
+   */
+
+    legend {
+      box-sizing: border-box;
+      /* 1 */
+      color: inherit;
+      /* 2 */
+      display: table;
+      /* 1 */
+      max-width: 100%;
+      /* 1 */
+      padding: 0;
+      /* 3 */
+      white-space: normal;
+      /* 1 */
+    }
+
+    /**
+   * Add the correct vertical alignment in Chrome, Firefox, and Opera.
+   */
+
+    progress {
+      vertical-align: baseline;
+    }
+
+    /**
+   * Remove the default vertical scrollbar in IE 10+.
+   */
+
+    textarea {
+      overflow: auto;
+    }
+
+    /**
+   * 1. Add the correct box sizing in IE 10.
+   * 2. Remove the padding in IE 10.
+   */
+
+    [type="checkbox"],
+    [type="radio"] {
+      box-sizing: border-box;
+      /* 1 */
+      padding: 0;
+      /* 2 */
+    }
+
+    /**
+   * Correct the cursor style of increment and decrement buttons in Chrome.
+   */
+
+    [type="number"]::-webkit-inner-spin-button,
+    [type="number"]::-webkit-outer-spin-button {
+      height: auto;
+    }
+
+    /**
+   * 1. Correct the odd appearance in Chrome and Safari.
+   * 2. Correct the outline style in Safari.
+   */
+
+    [type="search"] {
+      -webkit-appearance: textfield;
+      /* 1 */
+      outline-offset: -2px;
+      /* 2 */
+    }
+
+    /**
+   * Remove the inner padding in Chrome and Safari on macOS.
+   */
+
+    [type="search"]::-webkit-search-decoration {
+      -webkit-appearance: none;
+    }
+
+    /**
+   * 1. Correct the inability to style clickable types in iOS and Safari.
+   * 2. Change font properties to `inherit` in Safari.
+   */
+
+    ::-webkit-file-upload-button {
+      -webkit-appearance: button;
+      /* 1 */
+      font: inherit;
+      /* 2 */
+    }
+
+    /* Interactive
+     ========================================================================== */
+
+    /*
+   * Add the correct display in Edge, IE 10+, and Firefox.
+   */
+
+    details {
+      display: block;
+    }
+
+    /*
+   * Add the correct display in all browsers.
+   */
+
+    summary {
+      display: list-item;
+    }
+
+    /* Misc
+     ========================================================================== */
+
+    /**
+   * Add the correct display in IE 10+.
+   */
+
+    template {
+      display: none;
+    }
+
+    /**
+   * Add the correct display in IE 10.
+   */
+
+    [hidden] {
+      display: none;
+    }
+  </style>
+  <style>
+    * {
+      font-family: 'Kanit', sans-serif;
+    }
+
+    body,
+    html {
+      background: #202020;
+    }
+
+    header {
+      background: #FFD100;
+      height: 50px;
+      width: 100%;
+      position: fixed;
+      z-index: 100;
+      top: 0;
+      left: 0;
+      right: 0;
+      border-radius: 0 0 5px 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    footer {
+      height: 20px;
+      width: 100%;
+      background-color: #5C0099;
+      position: absolute;
+    }
+
+    .chat {
+      width: 70%;
+      max-width: 600px;
+      background: #333533;
+      margin: 0 auto;
+      color: #fff;
+      border: 1px solid #919191;
+      border-bottom: none;
+      border-top: none;
+      height: calc(100vh - 20px);
+      box-sizing: border-box;
+      max-height: max-content;
+
+    }
+
+    .chat-messages {
+      height: 90%;
+      width: 100%;
+      max-width: 650px;
+      padding: 50px 10px 10px 10px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column-reverse;
+      flex-wrap: nowrap;
+      overflow-y: auto;
+    }
+
+    .chat-item,
+    .my-message {
+      display: flex;
+      width: 100%;
+      margin: 5px auto;
+      height: max-content;
+      min-height: 30px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+
+    .chat-item {
+      flex-direction: row;
+    }
+
+    .my-message {
+      flex-direction: row-reverse;
+    }
+
+    .avatar {
+      height: 50px;
+      width: 50px;
+      background: #5C0099;
+      border-radius: 5px;
+      margin: 0 5px;
+    }
+
+    .chat-item .text {
+      background: #292B29;
+      width: 80%;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+      padding: 5px;
+      border-radius: 5px;
+      flex-shrink: 0;
+    }
+
+    h4,
+    p {
+      margin: 5px;
+    }
+
+    button {
+      height: 45px;
+      width: 45px;
+      background: #5C0099;
+      border: none;
+      outline: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: .2s;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    button:hover {
+      box-shadow: 0px 0px 15px 3px #931be2b4;
+    }
+
+    input {
+      width: 70%;
+      height: 45px;
+      outline: none;
+      border: 1px solid #919191;
+      background: #333533;
+      border-radius: 5px;
+      resize: none;
+      color: #fff;
+      box-sizing: border-box;
+      padding: 5px;
+    }
+
+    .chat-form {
+      background-color: #202020;
+      height: 10%;
+      border-radius: 5px 5px 0 0;
+      box-sizing: border-box;
+      padding: 10px;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      min-height: 80px;
+      font-weight: 300;
+    }
+
+    @media (max-width: 500px) {
+      .chat {
+        width: 85%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="app">
+    <script src="
+https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js
+"></script>
+    <header>
+      <svg width="40" height="40" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <mask id="mask0_849_50" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="2" y="4" width="118" height="116">
+          <rect x="2.92676" y="4.79999" width="117.073" height="115.2" fill="#D9D9D9" />
+        </mask>
+        <g mask="url(#mask0_849_50)">
+          <path
+            d="M12.6831 86.4V19.2C12.6831 17.84 13.1514 16.6992 14.088 15.7776C15.0213 14.8592 16.179 14.4 17.5612 14.4H80.9758C82.3579 14.4 83.5156 14.8592 84.449 15.7776C85.3855 16.6992 85.8538 17.84 85.8538 19.2V62.4C85.8538 63.76 85.3855 64.8992 84.449 65.8176C83.5156 66.7392 82.3579 67.2 80.9758 67.2H32.1953L12.6831 86.4ZM37.0733 91.2C35.6912 91.2 34.5319 90.7392 33.5953 89.8176C32.662 88.8992 32.1953 87.76 32.1953 86.4V76.8H95.6099V33.6H105.366C106.748 33.6 107.906 34.0592 108.839 34.9776C109.776 35.8992 110.244 37.04 110.244 38.4V110.4L90.7319 91.2H37.0733ZM76.0977 24H22.4392V63.24L28.1709 57.6H76.0977V24Z"
+            fill="#5C0099" />
+        </g>
+        <mask id="mask1_849_50" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="118" height="116">
+          <rect width="117.073" height="115.2" fill="#D9D9D9" />
+        </mask>
+        <g mask="url(#mask1_849_50)">
+          <path
+            d="M9.75586 81.6V14.4C9.75586 13.04 10.2242 11.8992 11.1607 10.9776C12.0941 10.0592 13.2518 9.60001 14.6339 9.60001H78.0485C79.4307 9.60001 80.5884 10.0592 81.5217 10.9776C82.4583 11.8992 82.9266 13.04 82.9266 14.4V57.6C82.9266 58.96 82.4583 60.0992 81.5217 61.0176C80.5884 61.9392 79.4307 62.4 78.0485 62.4H29.2681L9.75586 81.6ZM34.1461 86.4C32.764 86.4 31.6046 85.9392 30.6681 85.0176C29.7347 84.0992 29.2681 82.96 29.2681 81.6V72H92.6827V28.8H102.439C103.821 28.8 104.979 29.2592 105.912 30.1776C106.849 31.0992 107.317 32.24 107.317 33.6V105.6L87.8046 86.4H34.1461ZM73.1705 19.2H19.512V58.44L25.2437 52.8H73.1705V19.2Z"
+            fill="#FFB703" />
+        </g>
+      </svg>
+
+    </header>
+    <div class="chat">
+      <div class="chat-messages">
+        <div v-for="message in messages">
+          <div class="chat-item my-message" v-if="id == message.user">
+            <div class="avatar" style="background-color: #FFD100;"></div>
+            <div class="text">
+              <h4>Você</h4>
+              <p>{{ message.message }}</p>
+            </div>
+          </div>
+          <div class="chat-item" v-else>
+            <div class="avatar"></div>
+            <div class="text">
+              <h4>@{{ message.user }}</h4>
+              <p>{{ message.message }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <form class="chat-form" @submit.prevent="sendMessage">
+        <input maxlength="300" type="text" required v-model="message" placeholder="Digite algo..."
+          @keydown.enter="sendMessage"></input>
+        <button type="submit">
+          <svg width="30" height="30" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <mask id="mask0_847_11" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="48"
+              height="48">
+              <rect width="48" height="48" fill="#D9D9D9" />
+            </mask>
+            <g mask="url(#mask0_847_11)">
+              <path
+                d="M6.19995 37.6V10.35C6.19995 9.84998 6.41662 9.45831 6.84995 9.17498C7.28328 8.89165 7.73328 8.84998 8.19995 9.04998L40.5 22.65C41.0666 22.9166 41.3499 23.3666 41.3499 24C41.3499 24.6333 41.0666 25.0666 40.5 25.3L8.19995 38.9C7.73328 39.1 7.28328 39.0666 6.84995 38.8C6.41662 38.5333 6.19995 38.1333 6.19995 37.6ZM9.09995 35.25L36.0999 23.95L9.09995 12.5V20.9L21 23.95L9.09995 26.9V35.25Z"
+                fill="white" />
+            </g>
+          </svg>
+
+        </button>
+      </form>
+    </div>
+    <footer></footer>
+  </div>
+
+  <script>
+    const socket = io()
+    const { createApp } = Vue;
+
+    const app = createApp({
+      data() {
+        return {
+          messages: [],
+          message: "",
+          id: ""
+        }
+      },
+      methods: {
+        sendMessage() {
+          socket.emit("SEND_MESSAGE", this.message)
+          this.message = ""
+        }
+      }
+    }).mount('#app')
+
+    socket.on("connect", () => {
+      app.id = socket.id
+    });
+
+    socket.on("status", (data) => {
+      console.log(data)
+    })
+
+    socket.on("NEW_MESSAGE", (msg) => {
+      app.messages.unshift(msg)
+    })
+  </script>
+</body>
+
+</html>
