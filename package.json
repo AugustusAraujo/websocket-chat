@@ -1,12 +1,13 @@
 {
   "name": "api",
-  "version": "1.0.0",
+  "version": "0.2.0-dev",
   "main": "index.js",
   "author": "Augustus Araújo",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon --watch \"*\" --ext \"ts,json,html,css\" --ignore \"src/**/*.spec.ts\" --exec \"ts-node src/index.ts\"",
-    "build": "tsc"
+    "dev": "nodemon --watch \"*\" --ext \"ts,json\" --ignore \"src/**/*.spec.ts\" --exec \"ts-node src/index.ts\"",
+    "build": "tsc",
+    "serve": "node ./dist/index.js"
   },
   "dependencies": {
     "@types/socket.io": "^3.0.2",
